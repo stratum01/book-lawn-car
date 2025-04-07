@@ -3,19 +3,23 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy package.json files
-COPY server/package*.json ./
+COPY package*.json ./
 RUN npm install
 
-# Create necessary directories
-RUN mkdir -p public data
+# Copy all source files
+COPY . .
 
-# Copy server code
-COPY server/ ./
+# Build the frontend
+RUN npm run build
 
-# Copy frontend build to public directory
-COPY dist/ ./public/
+# Set up server
+WORKDIR /app/server
+RUN npm install
 
-# Set environment variables
+# Create data directory
+RUN mkdir -p data
+
+# Environment variables
 ENV PORT=8080
 ENV NODE_ENV=production
 

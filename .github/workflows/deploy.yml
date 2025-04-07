@@ -10,8 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build frontend
+        run: npm run build
+        
+      - name: Setup Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+        
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only
         env:
-          FLY_API_TOKEN: fo1_NcxNkoRHnCHNajnRQg_YhM4ZuEIUzfeK-sB7PnGFmjM
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
