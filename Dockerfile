@@ -12,6 +12,10 @@ COPY . .
 # Build the frontend
 RUN npm run build
 
+# Create server/public directory and copy build files there
+RUN mkdir -p server/public
+RUN cp -r dist/* server/public/
+
 # Set up server
 WORKDIR /app/server
 RUN npm install
