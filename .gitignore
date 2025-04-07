@@ -52,3 +52,5 @@ server/data/*.json
 
 # Fly.io
 .fly/
+
+dist/
