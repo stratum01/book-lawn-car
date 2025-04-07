@@ -26,7 +26,7 @@ export const api = {
       console.error('Error fetching available slots:', error);
       throw error;
     }
-  }
+  },
 
   //admin interface
   getAppointments: async () => {
@@ -38,6 +38,7 @@ export const api = {
       throw error;
     }
   }
+
 };
 
 export default api;
