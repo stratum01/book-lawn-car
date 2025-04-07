@@ -27,6 +27,17 @@ export const api = {
       throw error;
     }
   }
+
+  //admin interface
+  getAppointments: async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/appointments`);
+     return response.data;
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      throw error;
+    }
+  }
 };
 
 export default api;
