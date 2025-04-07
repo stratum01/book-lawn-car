@@ -1,27 +1,26 @@
-# Build stage for frontend
-FROM node:18-alpine as frontend-builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Production stage
 FROM node:18-alpine
+
 WORKDIR /app
 
-# Copy server files
+# Copy package.json files
 COPY server/package*.json ./
-RUN npm install --production
-COPY server ./
+RUN npm install
 
-# Copy built frontend
-COPY --from=frontend-builder /app/dist ./public
+# Create necessary directories
+RUN mkdir -p public data
 
-# Environment variables
+# Copy server code
+COPY server/ ./
+
+# Copy frontend build to public directory
+COPY dist/ ./public/
+
+# Set environment variables
 ENV PORT=8080
 ENV NODE_ENV=production
 
-# Start server
+# Expose the port
 EXPOSE 8080
+
+# Start server
 CMD ["node", "server.js"]

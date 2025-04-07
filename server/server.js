@@ -23,6 +23,16 @@ const twilioClient = twilio(
 const appointmentsPath = path.join(__dirname, 'data', 'appointments.json');
 const customersPath = path.join(__dirname, 'data', 'customers.json');
 
+async function ensureDataDirectoryExists() {
+  const dataDir = path.join(__dirname, 'data');
+  try {
+    await fs.access(dataDir);
+  } catch (error) {
+    await fs.mkdir(dataDir, { recursive: true });
+    console.log('Created data directory');
+  }
+}
+
 // Initialize data files if they don't exist
 async function initializeDataFiles() {
   try {
@@ -240,8 +250,13 @@ app.get('*', (req, res) => {
 });
 
 
-// Start server
-initializeDataFiles().then(() => {
+async function initialize() {
+  await ensureDataDirectoryExists();
+  await initializeDataFiles();
+}
+
+// Update the server startup
+initialize().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`SMS webhook endpoint: http://localhost:${PORT}/api/sms-webhook`);
